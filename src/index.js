@@ -1,4 +1,5 @@
 import Main from './Main';
+import '../public/main.sass';
 const React = require('react');
 const ReactDom = require('react-dom');
 const root = document.getElementById('root');
