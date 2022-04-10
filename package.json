@@ -4,13 +4,18 @@
   "description": "The front end of the admin side of my blog.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --hot",
+    "start": "nodemon server.js",
+    "devstart": "webpack-dev-server --mode development --hot",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "express-csp-header": "^4.0.0",
+    "helmet": "^4.1.1",
+    "nodemon": "^2.0.4",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
@@ -23,6 +28,8 @@
     "html-webpack-plugin": "^5.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
     "style-loader": "^1.2.1",
     "webpack": "^5.72.0",
     "webpack-cli": ">3.3.12",

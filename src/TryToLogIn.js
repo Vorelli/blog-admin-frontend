@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import TitleBar from './TitleBar';
+import moment from 'moment';
 
 class TryToLogIn extends Component {
   constructor(props) {
@@ -7,27 +10,39 @@ class TryToLogIn extends Component {
       tryingToLogIn: true,
       logInSuccessful: false,
     };
-    this.tryToLogIn();
+    setTimeout(this.tryToLogIn.bind(this), 100);
   }
 
-  tryToLogIn() {
+  async tryToLogIn() {
     const token = localStorage.getItem('token');
     if (!token) this.setState({ tryingToLogIn: false, logInSuccessful: false });
     else {
-      fetch('http://back-end-of-blog.herokuapp.com/backend').catch((err) => {
-        console.log(err);
-        this.setState({ tryingToLogIn: false, logInSuccessful: false });
-      }); // TODO: Need to request posts and see if token is valid.
+      fetch('https://back-end-of-blog.herokuapp.com/backend/check', {
+        mode: 'cors',
+        headers: { Authorization: 'Bearer ' + token },
+        method: 'GET'
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message && response.message === 'You are logged in!') {
+            this.setState({ tryingToLogIn: false, logInSuccessful: true });
+          } else {
+            this.setState({ tryingToLogIn: false, logInSuccessful: false });
+          }
+        })
+        .catch((err) => console.error(err)); // TODO: Need to request posts and see if token is valid.
     }
   }
 
   render() {
     if (this.state.tryingToLogIn) {
-      return <div>Loading...</div>;
+      return pug`
+      TitleBar(title="Posts" createHidden=true)
+      .container.loading Loading...`;
     } else if (this.state.logInSuccessful) {
-      return <></>;
+      return pug`Redirect(to='/posts')`;
     } else {
-      return <div>Log in failed</div>;
+      return pug`Redirect(to='/log-in')`;
     }
   }
 }

@@ -1,17 +1,35 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 
 class LogIn extends Component {
-  render() {
-    return pug`
-    form(name='LogInForm' id='LogInForm')
-      label(for='username') Email:
-      input(type='email' name='username' required)
-      label(for='password') Password:
-      input(type='password' name='password' required)
-      button(type='button' onClick=this.requestToken) Log in`;
+  constructor(props) {
+    super(props);
+    this.state = {
+      logInSuccessful: false,
+      errors: null
+    };
   }
 
-  async requestToken() {
+  render() {
+    if (this.state.logInSuccessful) return pug`Redirect(to='/posts')`;
+    return pug`
+    .container
+      form(name='LogInForm' id='LogInForm' onSubmit=this.requestToken.bind(this))
+        .form-group
+          label(for='username') Email:
+          input(type='email' name='username' required).form-control
+        .form-group
+          label(for='password') Password:
+          input(type='password' name='password' required).form-control
+        button(type='submit').btn.btn-primary Log in
+      if this.state.errors
+        ul.errors
+          each error in this.state.errors
+            li(key = error.msg)= error.msg`;
+  }
+
+  async requestToken(event) {
+    event.preventDefault();
     const formData = new FormData(document.querySelector('#LogInForm'));
     fetch('back-end-of-blog.herokuapp.com/backend/login', {
       mode: 'cors',
@@ -19,7 +37,14 @@ class LogIn extends Component {
       body: formData,
     })
       .then((response) => response.json())
-      .then((response) => localStorage.setItem('token', response.token));
+      .then(function (response) {
+        if (response.message == 'Something is not right') {
+          throw response.errors;
+        }
+        localStorage.setItem('token', response.token);
+        this.setState({ logInSuccessful: true });
+      }.bind(this))
+      .catch((errors) => { const state = this.state; state.errors = errors; this.setState(state); });
   }
 }
 
