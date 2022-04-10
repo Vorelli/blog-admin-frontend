@@ -13,10 +13,10 @@ class LogIn extends Component {
 
   async requestToken() {
     const formData = new FormData(document.querySelector('#LogInForm'));
-    fetch('http://localhost:3000/backend/login', {
+    fetch('back-end-of-blog.herokuapp.com/backend/login', {
       mode: 'cors',
       method: 'POST',
-      body: formData
+      body: formData,
     })
       .then((response) => response.json())
       .then((response) => localStorage.setItem('token', response.token));
