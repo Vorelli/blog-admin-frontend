@@ -14,11 +14,11 @@ class SignIn extends Component {
 
   requestToken() {
     const formData = new FormData(document.querySelector('#LogInForm'));
-    fetch('localhost:3000/backend/login', {
+    fetch('back-end-of-blog.herokuapp.com/backend/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: formData,
-      redirect: 'manual'
+      redirect: 'manual',
     }).then((response) => console.log(response));
   }
 }

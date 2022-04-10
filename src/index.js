@@ -7,7 +7,7 @@ class Base extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      accessToken: null
+      accessToken: null,
     };
   }
 
@@ -33,4 +33,4 @@ class SignInPage extends React.Component {
 const App = () => pug`
 Base
 SignInPage`;
-ReactDom.render(pug`Main`, root);
+ReactDom.render(<Main />, root);

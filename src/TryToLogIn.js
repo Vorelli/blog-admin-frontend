@@ -5,27 +5,29 @@ class TryToLogIn extends Component {
     super(props);
     this.state = {
       tryingToLogIn: true,
-      logInSuccessful: false
+      logInSuccessful: false,
     };
+    this.tryToLogIn();
   }
 
   tryToLogIn() {
     const token = localStorage.getItem('token');
     if (!token) this.setState({ tryingToLogIn: false, logInSuccessful: false });
     else {
-      fetch('localhost:3000'); // TODO: Need to request posts and see if token is valid.
+      fetch('http://back-end-of-blog.herokuapp.com/backend').catch((err) => {
+        console.log(err);
+        this.setState({ tryingToLogIn: false, logInSuccessful: false });
+      }); // TODO: Need to request posts and see if token is valid.
     }
   }
 
   render() {
     if (this.state.tryingToLogIn) {
-      tryToLogIn();
-      return pug`
-      div Loading...`;
+      return <div>Loading...</div>;
     } else if (this.state.logInSuccessful) {
-      return pug``;
+      return <></>;
     } else {
-      return pug``;
+      return <div>Log in failed</div>;
     }
   }
 }

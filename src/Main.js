@@ -5,12 +5,14 @@ import TryToLogIn from './TryToLogIn';
 
 class Main extends Component {
   render() {
-    return pug`
-      HashRouter
-        div.content
-          Route(path='/' component=TryToLogIn)
-          Route(path='/log-in' component=LogIn)
-    `;
+    return (
+      <HashRouter>
+        <div className='content'>
+          <Route path='/' component={TryToLogIn} />
+          <Route path='/login' component={LogIn} />
+        </div>
+      </HashRouter>
+    );
   }
 }
 
